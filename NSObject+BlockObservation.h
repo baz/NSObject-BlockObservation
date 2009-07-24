@@ -1,9 +1,10 @@
 //
 //  NSObject+BlockObservation.h
-//  BlockObserve
+//  Version 1.0
 //
-//  Created by Andy Matuschak on 7/23/09.
-//  Copyright 2009 Andy Matuschak. All rights reserved.
+//  Andy Matuschak
+//  andy@andymatuschak.org
+//  Public domain because I love you. Let me know how you use it.
 //
 
 #import <Cocoa/Cocoa.h>
