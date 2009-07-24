@@ -60,6 +60,7 @@ static NSString *AMObserverTrampolineContext = @"AMObserverTrampolineContext";
 
 - (void)dealloc
 {
+	[self cancelObservation];
 	[task release];
 	[keyPath release];
 	[queue release];
