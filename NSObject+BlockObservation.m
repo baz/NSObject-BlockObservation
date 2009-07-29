@@ -69,7 +69,7 @@ static NSString *AMObserverTrampolineContext = @"AMObserverTrampolineContext";
 
 @end
 
-static NSString *AMObserverMapKey = @"AMObserverMapKey";
+static NSString *AMObserverMapKey = @"org.andymatuschak.observerMap";
 
 @implementation NSObject (AMBlockObservation)
 
