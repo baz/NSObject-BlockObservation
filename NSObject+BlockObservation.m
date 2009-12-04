@@ -56,11 +56,13 @@ static NSString *AMObserverTrampolineContext = @"AMObserverTrampolineContext";
 - (void)cancelObservation
 {
 	[observee removeObserver:self forKeyPath:keyPath];
+    observee = nil;
 }
 
 - (void)dealloc
 {
-	[self cancelObservation];
+    if (observee)
+    	[self cancelObservation];
 	[task release];
 	[keyPath release];
 	[queue release];
