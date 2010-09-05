@@ -1,10 +1,10 @@
 //
-//  NSObject+BlockObservation.h
-//  Version 1.0
+//	NSObject+BlockObservation.h
+//	Version 1.0
 //
-//  Andy Matuschak
-//  andy@andymatuschak.org
-//  Public domain because I love you. Let me know how you use it.
+//	Andy Matuschak
+//	andy@andymatuschak.org
+//	Public domain because I love you. Let me know how you use it.
 //
 
 #import "NSObject+BlockObservation.h"
@@ -13,10 +13,10 @@
 
 @interface AMObserverTrampoline : NSObject
 {
-    __weak id observee;
-    NSString *keyPath;
-    AMBlockTask task;
-    NSOperationQueue *queue;
+	__weak id observee;
+	NSString *keyPath;
+	AMBlockTask task;
+	NSOperationQueue *queue;
 	dispatch_once_t cancellationPredicate;
 }
 
@@ -30,25 +30,25 @@ static NSString *AMObserverTrampolineContext = @"AMObserverTrampolineContext";
 
 - (AMObserverTrampoline *)initObservingObject:(id)obj keyPath:(NSString *)newKeyPath onQueue:(NSOperationQueue *)newQueue task:(AMBlockTask)newTask
 {
-    if (!(self = [super init])) return nil;
-    task = [newTask copy];
-    keyPath = [newKeyPath copy];
-    queue = [newQueue retain];
-    observee = obj;
+	if (!(self = [super init])) return nil;
+	task = [newTask copy];
+	keyPath = [newKeyPath copy];
+	queue = [newQueue retain];
+	observee = obj;
 	cancellationPredicate = 0;
-    [observee addObserver:self forKeyPath:keyPath options:0 context:AMObserverTrampolineContext];   
-    return self;
+	[observee addObserver:self forKeyPath:keyPath options:0 context:AMObserverTrampolineContext];	
+	return self;
 }
 
 - (void)observeValueForKeyPath:(NSString *)aKeyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == AMObserverTrampolineContext)
-    {
-        if (queue)
-            [queue addOperationWithBlock:^{ task(object, change); }];
-        else
-            task(object, change);
-    }
+	if (context == AMObserverTrampolineContext)
+	{
+		if (queue)
+			[queue addOperationWithBlock:^{ task(object, change); }];
+		else
+			task(object, change);
+	}
 }
 
 - (void)cancelObservation
@@ -62,10 +62,10 @@ static NSString *AMObserverTrampolineContext = @"AMObserverTrampolineContext";
 - (void)dealloc
 {
 	[self cancelObservation];
-    [task release];
-    [keyPath release];
-    [queue release];
-    [super dealloc];
+	[task release];
+	[keyPath release];
+	[queue release];
+	[super dealloc];
 }
 
 @end
@@ -86,25 +86,25 @@ static dispatch_queue_t AMObserverMutationQueueCreatingIfNecessary()
 
 - (AMBlockToken *)addObserverForKeyPath:(NSString *)keyPath task:(AMBlockTask)task
 {
-    return [self addObserverForKeyPath:keyPath onQueue:nil task:task];
+	return [self addObserverForKeyPath:keyPath onQueue:nil task:task];
 }
 
 - (AMBlockToken *)addObserverForKeyPath:(NSString *)keyPath onQueue:(NSOperationQueue *)queue task:(AMBlockTask)task
 {
-    AMBlockToken *token = [[NSProcessInfo processInfo] globallyUniqueString];
-    dispatch_sync(AMObserverMutationQueueCreatingIfNecessary(), ^{
+	AMBlockToken *token = [[NSProcessInfo processInfo] globallyUniqueString];
+	dispatch_sync(AMObserverMutationQueueCreatingIfNecessary(), ^{
 		NSMutableDictionary *dict = objc_getAssociatedObject(self, AMObserverMapKey);
-        if (!dict)
+		if (!dict)
 		{
 			dict = [[NSMutableDictionary alloc] init];
-            objc_setAssociatedObject(self, AMObserverMapKey, dict, OBJC_ASSOCIATION_RETAIN);
+			objc_setAssociatedObject(self, AMObserverMapKey, dict, OBJC_ASSOCIATION_RETAIN);
 			[dict release];
 		}
-        AMObserverTrampoline *trampoline = [[AMObserverTrampoline alloc] initObservingObject:self keyPath:keyPath onQueue:queue task:task];
-        [dict setObject:trampoline forKey:token];
+		AMObserverTrampoline *trampoline = [[AMObserverTrampoline alloc] initObservingObject:self keyPath:keyPath onQueue:queue task:task];
+		[dict setObject:trampoline forKey:token];
 		[trampoline release];
-    });
-    return token;
+	});
+	return token;
 }
 
 - (void)removeObserverWithBlockToken:(AMBlockToken *)token
