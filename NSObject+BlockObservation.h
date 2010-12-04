@@ -16,4 +16,5 @@ typedef void (^AMBlockTask)(id obj, NSDictionary *change);
 - (AMBlockToken *)addObserverForKeyPath:(NSString *)keyPath task:(AMBlockTask)task;
 - (AMBlockToken *)addObserverForKeyPath:(NSString *)keyPath onQueue:(NSOperationQueue *)queue task:(AMBlockTask)task;
 - (void)removeObserverWithBlockToken:(AMBlockToken *)token;
+- (void)removeAllObserversForKeyPath:(NSString *)keyPath;
 @end
