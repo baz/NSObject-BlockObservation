@@ -194,9 +194,11 @@ static void cleanUpObserverDicts(id observer)
             NSLog(@"[NSObject(AMBlockObservation) removeAllObserversForKeyPath]: Ignoring attempt to remove non-existent observer(s) on %@ for keyPath %@.", self, keyPath);
             return;
         }
-        [trampolines enumerateObjectsUsingBlock:^(AMObserverTrampoline *trampoline, NSUInteger index, BOOL *stop) {
+        NSArray *trampolinesShallowCopy = [trampolines copyWithZone:nil];
+        for (AMObserverTrampoline *trampoline in trampolinesShallowCopy) {
             cancelTrampoline(self, trampoline);
-        }];
+        }
+        [trampolinesShallowCopy release];
         cleanUpObserverDicts(self);
     });
 }
