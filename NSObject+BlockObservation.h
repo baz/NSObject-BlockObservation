@@ -7,7 +7,7 @@
 //  Public domain because I love you. Let me know how you use it.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 typedef NSString AMBlockToken;
 typedef void (^AMBlockTask)(id obj, NSDictionary *change);
