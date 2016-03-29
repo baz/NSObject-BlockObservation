@@ -14,7 +14,7 @@
 @interface AMObserverTrampoline : NSObject
 {
     @private
-        __weak id observee;
+        id observee;
         NSString *keyPath;
         AMBlockTask task;
         NSOperationQueue *queue;
